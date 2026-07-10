@@ -1,0 +1,701 @@
+/* ============================================================
+   Holger Fritzsche · Dachdeckermeister — Doodle-Design
+   ============================================================ */
+
+/* ---------- Fonts (lokal gehostet, DSGVO-sicher) ---------- */
+@font-face {
+  font-family: 'Caveat';
+  src: url('fonts/caveat.woff2') format('woff2');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Nunito';
+  src: url('fonts/nunito.woff2') format('woff2');
+  font-weight: 200 1000;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Nunito';
+  src: url('fonts/nunito-italic.woff2') format('woff2');
+  font-weight: 200 1000;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ---------- Grundgerüst ---------- */
+:root {
+  --paper: #FBF6ED;
+  --paper-dot: #EEE4D2;
+  --card: #FFFDF7;
+  --ink: #33302B;
+  --ink-line: #3A342C;
+  --ink-soft: #6B655C;
+  --brick: #C65A2E;
+  --brick-deep: #A34423;
+  --slate: #4E7A96;
+  --sun: #E9B44C;
+  --ok: #F6E3B8;
+
+  --wobble-lg: 255px 20px 225px 20px / 20px 225px 20px 255px;
+  --wobble-md: 160px 14px 190px 12px / 14px 170px 12px 200px;
+  --wobble-sm: 90px 8px 100px 8px / 8px 95px 8px 105px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', 'Segoe UI', system-ui, sans-serif;
+  font-weight: 400;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--paper-dot) 1.2px, transparent 1.2px);
+  background-size: 26px 26px;
+  line-height: 1.6;
+}
+
+::selection { background: var(--sun); color: var(--ink); }
+
+a { color: var(--brick-deep); }
+
+:focus-visible {
+  outline: 3px solid var(--slate);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 22px;
+}
+
+section { position: relative; overflow-x: clip; }
+
+/* ---------- Dach-Header ---------- */
+.roof {
+  position: relative;
+  height: clamp(170px, 24vw, 260px);
+  line-height: 0;
+}
+.roof--small { height: clamp(110px, 14vw, 170px); }
+
+.roof-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.shingle-wrap .shingle {
+  stroke: var(--ink-line);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+.shingle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: shingle-in .55s cubic-bezier(.2, 1.5, .4, 1) backwards;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes shingle-in {
+  from { opacity: 0; transform: scale(.4) rotate(6deg); }
+  to   { opacity: 1; transform: none; }
+}
+
+.ridgecap {
+  fill: var(--brick-deep);
+  stroke: var(--ink-line);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: shingle-in .5s cubic-bezier(.2, 1.5, .4, 1) backwards;
+  animation-delay: var(--d, 0ms);
+}
+
+/* Schornstein-Rauch */
+.puff {
+  fill: var(--card);
+  stroke: var(--ink-line);
+  stroke-width: 2.5;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: puff-rise 5.5s ease-out infinite;
+}
+.puff.p2 { animation-delay: 1.8s; }
+.puff.p3 { animation-delay: 3.6s; }
+@keyframes puff-rise {
+  0%   { opacity: 0; transform: translateY(10px) scale(.4); }
+  15%  { opacity: .9; }
+  70%  { opacity: .35; }
+  100% { opacity: 0; transform: translateY(-52px) scale(1.6); }
+}
+
+/* Vogel auf dem First */
+.bird {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+  animation: bird-hop 9s ease-in-out infinite;
+}
+@keyframes bird-hop {
+  0%, 88%, 100% { transform: none; }
+  90% { transform: translateY(-8px) rotate(-3deg); }
+  92% { transform: none; }
+  94% { transform: translateY(-5px) rotate(2deg); }
+  96% { transform: none; }
+}
+
+/* Wolken ziehen vorbei */
+.cloud { animation: cloud-drift 120s linear infinite; }
+.cloud.c2 { animation-duration: 160s; animation-delay: -70s; }
+@keyframes cloud-drift {
+  from { transform: translateX(-300px); }
+  to   { transform: translateX(1800px); }
+}
+
+/* Möwe */
+.flybird { animation: fly-by 75s linear infinite; }
+@keyframes fly-by {
+  from { transform: translateX(1700px); }
+  to   { transform: translateX(-260px); }
+}
+
+/* ---------- Doodle-Grundzutaten ---------- */
+.doodle-stroke {
+  fill: none;
+  stroke: var(--ink-line);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.draw.drawn {
+  transition: stroke-dashoffset 1.2s ease .15s;
+  stroke-dashoffset: 0 !important;
+}
+
+.bob { animation: bob 5s ease-in-out infinite alternate; }
+@keyframes bob {
+  from { transform: translateY(-5px) rotate(-2deg); }
+  to   { transform: translateY(6px) rotate(2.5deg); }
+}
+
+.sun-spin {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: spin 70s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-5deg); }
+  60% { transform: rotate(4deg); }
+}
+
+.float-doodle {
+  position: absolute;
+  pointer-events: none;
+  color: var(--ink-soft);
+}
+@media (max-width: 860px) {
+  .float-doodle--desktop { display: none; }
+}
+
+/* ---------- Typo ---------- */
+h1, h2 {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: .01em;
+}
+
+.kicker {
+  display: block;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: .82rem;
+  text-transform: uppercase;
+  letter-spacing: .17em;
+  color: var(--brick-deep);
+  margin-bottom: .4rem;
+}
+
+.section-head { text-align: center; margin-bottom: clamp(2rem, 5vw, 3.2rem); }
+.section-head h2 { font-size: clamp(2.6rem, 6vw, 3.6rem); }
+.section-head .squiggle { display: block; margin: .2rem auto 0; color: var(--brick); }
+
+/* ---------- Hero ---------- */
+.hero {
+  text-align: center;
+  padding: clamp(2.2rem, 5vw, 4rem) 0 clamp(2.6rem, 6vw, 4.5rem);
+}
+
+.hero h1 {
+  font-size: clamp(3.2rem, 9vw, 5rem);
+  color: var(--ink);
+}
+
+.hero .meister {
+  display: block;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: clamp(.95rem, 2.6vw, 1.2rem);
+  text-transform: uppercase;
+  letter-spacing: .22em;
+  color: var(--brick-deep);
+  margin-top: .5rem;
+}
+
+.hero .tagline {
+  margin-top: 1.1rem;
+  font-family: 'Caveat', cursive;
+  font-weight: 600;
+  font-size: clamp(1.6rem, 4.5vw, 2.1rem);
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.hero .ort {
+  margin: .5rem 0 0;
+  font-size: clamp(1rem, 2.6vw, 1.12rem);
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: clamp(1.6rem, 3.5vw, 2.2rem);
+  position: relative;
+}
+
+.phone-line {
+  margin-top: 1.1rem;
+  font-weight: 700;
+  font-size: .98rem;
+  color: var(--ink-soft);
+}
+.phone-line a {
+  color: var(--ink);
+  font-weight: 800;
+  text-decoration: underline wavy var(--brick) 1.5px;
+  text-underline-offset: 5px;
+}
+.phone-line a:hover { color: var(--brick-deep); }
+
+.trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 1.3rem;
+}
+
+/* Pfeil-Doodle neben den Buttons */
+.cta-note {
+  position: absolute;
+  right: max(0px, calc(50% - 460px));
+  top: -74px;
+  width: 150px;
+  text-align: left;
+  color: var(--ink-soft);
+  pointer-events: none;
+}
+.cta-note .note-text {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 1.5rem;
+  transform: rotate(-7deg);
+  display: block;
+  color: var(--brick-deep);
+}
+.cta-note svg { width: 74px; height: 58px; margin-left: 34px; }
+@media (max-width: 960px) { .cta-note { display: none; } }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 1.06rem;
+  text-decoration: none;
+  color: var(--ink);
+  background: var(--card);
+  border: 2.5px solid var(--ink-line);
+  border-radius: var(--wobble-md);
+  padding: 15px 26px;
+  box-shadow: 3px 4px 0 var(--ink-line);
+  transition: transform .18s ease, box-shadow .18s ease;
+  cursor: pointer;
+}
+.btn svg { width: 22px; height: 22px; flex: none; }
+.btn:hover, .btn:focus-visible {
+  transform: translate(-1px, -3px) rotate(-.6deg);
+  box-shadow: 5px 8px 0 var(--ink-line);
+}
+.btn:hover svg { animation: wiggle .5s ease; }
+.btn:active {
+  transform: translate(2px, 3px);
+  box-shadow: 1px 1px 0 var(--ink-line);
+}
+.btn--primary {
+  background: var(--brick);
+  color: #FFF6EC;
+}
+
+/* ---------- Leistungen ---------- */
+.services { padding: clamp(2.5rem, 6vw, 4.5rem) 0; }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: clamp(20px, 3.5vw, 34px);
+}
+
+.card {
+  background: var(--card);
+  border: 2.5px solid var(--ink-line);
+  border-radius: var(--wobble-lg);
+  box-shadow: 4px 5px 0 var(--ink-line);
+  padding: clamp(24px, 3.5vw, 34px);
+  text-align: center;
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.card:nth-child(odd) { transform: rotate(-.8deg); }
+.card:nth-child(even) { transform: rotate(.7deg); }
+.card:hover {
+  transform: rotate(0) translateY(-5px);
+  box-shadow: 6px 9px 0 var(--ink-line);
+}
+
+.card .icon {
+  width: 74px;
+  height: 74px;
+  margin: 0 auto 14px;
+  color: var(--brick);
+  display: block;
+}
+.card:hover .icon { animation: wiggle .6s ease; }
+
+.card h3 {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 1.9rem;
+  margin-bottom: .35rem;
+}
+.card p { color: var(--ink-soft); font-weight: 600; font-size: .98rem; }
+
+/* Leistungs-Karten mit Titelzeile */
+.cards--services { grid-template-columns: 1fr; }
+@media (min-width: 700px) {
+  .cards--services { grid-template-columns: 1fr 1fr; }
+}
+
+.card--service { text-align: left; }
+.card--service:nth-child(odd) { transform: rotate(-.5deg); }
+.card--service:nth-child(even) { transform: rotate(.45deg); }
+
+.service-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: .6rem;
+}
+.card--service .icon {
+  width: 56px;
+  height: 56px;
+  margin: 0;
+  flex: none;
+}
+.card--service h3 { margin-bottom: 0; font-size: 1.8rem; }
+.card--service p { font-size: .95rem; line-height: 1.55; }
+
+/* Chip-Wolke */
+.more-services {
+  margin-top: clamp(1.8rem, 4vw, 2.6rem);
+  text-align: center;
+}
+.more-title {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 1.7rem;
+  color: var(--ink);
+  margin-bottom: .9rem;
+}
+.chip-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 12px;
+  max-width: 760px;
+  margin: 0 auto;
+}
+.tagchip {
+  font-weight: 700;
+  font-size: .88rem;
+  color: var(--ink);
+  background: var(--card);
+  border: 2px solid var(--ink-line);
+  border-radius: var(--wobble-sm);
+  box-shadow: 2px 2.5px 0 var(--ink-line);
+  padding: 6px 14px;
+}
+.tagchip:nth-child(3n) { transform: rotate(-1.2deg); }
+.tagchip:nth-child(3n+1) { transform: rotate(.9deg); }
+
+/* ---------- Über uns ---------- */
+.about {
+  padding: clamp(2.5rem, 6vw, 4.5rem) 0;
+  text-align: center;
+}
+.about blockquote {
+  font-family: 'Caveat', cursive;
+  font-weight: 600;
+  font-size: clamp(1.7rem, 4.5vw, 2.5rem);
+  line-height: 1.3;
+  max-width: 42rem;
+  margin: 0 auto;
+  color: var(--ink);
+}
+.about blockquote .mark { color: var(--brick); }
+.badge {
+  display: inline-block;
+  font-weight: 800;
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--ink);
+  background: var(--sun);
+  border: 2.5px solid var(--ink-line);
+  border-radius: var(--wobble-sm);
+  box-shadow: 2.5px 3px 0 var(--ink-line);
+  padding: 9px 20px;
+  transform: rotate(-1.5deg);
+}
+.badge--paper { background: var(--card); transform: rotate(1deg); }
+.badge--inline {
+  font-size: .74rem;
+  padding: 7px 14px;
+  letter-spacing: .1em;
+  box-shadow: 2px 2.5px 0 var(--ink-line);
+  border-width: 2px;
+}
+
+.badges-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 1.5rem;
+}
+
+/* ---------- Kontakt ---------- */
+.contact { padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(2.5rem, 6vw, 4rem); }
+
+.contact-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1rem;
+  font-weight: 700;
+  font-size: .95rem;
+  color: var(--ink-soft);
+  border: 2px dashed var(--ink-soft);
+  border-radius: var(--wobble-sm);
+  padding: 7px 16px;
+}
+.contact-note svg { color: var(--brick-deep); flex: none; }
+
+.contact-card {
+  background: var(--card);
+  border: 2.5px solid var(--ink-line);
+  border-radius: 26px 18px 30px 16px / 18px 26px 16px 30px;
+  box-shadow: 5px 6px 0 var(--ink-line);
+  max-width: 760px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.contact-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px 6px 6px;
+}
+.contact-row + .contact-row { border-top: 2.5px dashed var(--ink-soft); }
+
+.contact-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  text-decoration: none;
+  color: var(--ink);
+  padding: 16px 14px;
+  border-radius: 18px;
+  min-width: 0;
+}
+.contact-main:hover { background: rgba(233, 180, 76, .18); }
+.contact-main:hover .contact-icon { animation: wiggle .5s ease; color: var(--brick); }
+
+.contact-icon {
+  width: 46px;
+  height: 46px;
+  flex: none;
+  color: var(--brick-deep);
+}
+
+.contact-text { min-width: 0; }
+.contact-label {
+  display: block;
+  font-weight: 800;
+  font-size: .76rem;
+  text-transform: uppercase;
+  letter-spacing: .15em;
+  color: var(--ink-soft);
+}
+.contact-value {
+  display: block;
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: clamp(1.45rem, 4.2vw, 2rem);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+.contact-hint {
+  display: block;
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--slate);
+}
+
+.chip {
+  flex: none;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: .78rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink-line);
+  border-radius: var(--wobble-sm);
+  box-shadow: 2px 2.5px 0 var(--ink-line);
+  padding: 7px 13px;
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, background .2s ease;
+}
+.chip:hover { transform: translate(-1px, -1px); box-shadow: 3px 4px 0 var(--ink-line); }
+.chip:active { transform: translate(1px, 2px); box-shadow: 0 1px 0 var(--ink-line); }
+.chip.ok { background: var(--ok); }
+@media (max-width: 560px) { .chip { display: none; } }
+
+/* ---------- Skyline + Footer ---------- */
+.skyline {
+  margin-top: clamp(1.5rem, 4vw, 3rem);
+  line-height: 0;
+}
+.skyline svg {
+  width: 100%;
+  max-width: 1480px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+footer {
+  text-align: center;
+  padding: 1.6rem 22px 3rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  font-size: .92rem;
+}
+footer .foot-sub { font-size: .84rem; margin-top: .25rem; }
+footer .foot-links { margin-top: .4rem; }
+footer a {
+  color: var(--ink);
+  font-weight: 800;
+  text-decoration: underline wavy var(--brick) 1.5px;
+  text-underline-offset: 5px;
+}
+footer a:hover { color: var(--brick-deep); }
+
+/* ---------- Mobile-Leiste (schnell anrufen) ---------- */
+.mobile-bar {
+  display: none;
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 50;
+  background: var(--card);
+  border-top: 2.5px solid var(--ink-line);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.mobile-bar a {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 10px 4px 9px;
+  text-decoration: none;
+  font-weight: 800;
+  font-size: .74rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.mobile-bar a + a { border-left: 2px dashed var(--ink-soft); }
+.mobile-bar a svg { width: 24px; height: 24px; }
+.mobile-bar .bar-primary { background: var(--brick); color: #FFF6EC; }
+
+@media (max-width: 719px) {
+  .mobile-bar { display: flex; }
+  body { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+}
+
+/* ---------- Unterseiten (Impressum / Datenschutz) ---------- */
+.prose {
+  max-width: 720px;
+  padding-top: clamp(2rem, 5vw, 3.4rem);
+  padding-bottom: clamp(3rem, 7vw, 5rem);
+}
+.prose h1 { font-size: clamp(2.8rem, 7vw, 4rem); margin-bottom: 1.6rem; }
+.prose h2 {
+  font-size: 2rem;
+  margin: 2.2rem 0 .5rem;
+}
+.prose p, .prose ul { margin-bottom: .9rem; }
+.prose ul { padding-left: 1.3rem; }
+.prose .backlink {
+  display: inline-block;
+  margin-bottom: 1.8rem;
+  font-weight: 800;
+  text-decoration: underline wavy var(--brick) 1.5px;
+  text-underline-offset: 5px;
+  color: var(--ink);
+}
+.todo {
+  background: linear-gradient(120deg, rgba(233, 180, 76, .55), rgba(233, 180, 76, .35));
+  padding: 1px 6px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+/* ---------- Reduzierte Bewegung ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  html { scroll-behavior: auto; }
+  .puff { opacity: 0 !important; }
+}
