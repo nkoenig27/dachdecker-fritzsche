@@ -598,6 +598,105 @@ h1, h2 {
 .chip.ok { background: var(--ok); }
 @media (max-width: 560px) { .chip { display: none; } }
 
+/* ---------- Galerie ---------- */
+.gallery { padding: clamp(2.5rem, 6vw, 4.5rem) 0 0; }
+.gallery .section-head { margin-bottom: .4rem; }
+
+.gallery-shell { position: relative; }
+
+.gallery-scroller {
+  --gal-h: clamp(200px, 36vw, 320px);
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  padding: 38px max(22px, calc(50% - 498px)) 32px;
+  scroll-padding-inline: max(22px, calc(50% - 498px));
+  scrollbar-width: none;
+}
+.gallery-scroller::-webkit-scrollbar { display: none; }
+
+.gallery-item {
+  position: relative;
+  flex: none;
+  margin: 0;
+  scroll-snap-align: center;
+  background: var(--card);
+  border: 2.5px solid var(--ink-line);
+  border-radius: 18px 14px 20px 12px / 14px 20px 12px 18px;
+  box-shadow: 4px 5px 0 var(--ink-line);
+  padding: 10px 10px 4px;
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.gallery-item:nth-child(odd) { transform: rotate(-.8deg); }
+.gallery-item:nth-child(even) { transform: rotate(.7deg); }
+.gallery-item:hover {
+  transform: rotate(0) translateY(-5px);
+  box-shadow: 6px 9px 0 var(--ink-line);
+}
+
+.gallery-media {
+  height: var(--gal-h);
+  border: 2px dashed var(--ink-soft);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.is-land .gallery-media { aspect-ratio: 4 / 3; }
+.is-port .gallery-media { aspect-ratio: 3 / 4; }
+.gallery-media svg { width: 100%; height: 100%; display: block; }
+
+.gallery-item figcaption {
+  font-family: 'Caveat', cursive;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-align: center;
+  color: var(--ink-soft);
+  padding: .35rem 0 .25rem;
+}
+
+/* Kleines Dach über jedem Bilderrahmen — volle Rahmenbreite */
+.gallery-roof {
+  position: absolute;
+  top: -18px;
+  left: -6px;
+  right: -6px;
+  height: 26px;
+  pointer-events: none;
+  z-index: 2;
+  filter: drop-shadow(1.5px 2px 0 rgba(46, 42, 38, .16));
+}
+.gallery-roof svg { display: block; width: 100%; height: 100%; }
+
+.gal-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  background: var(--card);
+  border: 2.5px solid var(--ink-line);
+  border-radius: 46% 54% 52% 48% / 52% 46% 54% 48%;
+  box-shadow: 2.5px 3.5px 0 var(--ink-line);
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease, opacity .2s ease;
+}
+.gal-btn svg { width: 22px; height: 22px; }
+.gal-btn.prev { left: clamp(8px, 2vw, 28px); }
+.gal-btn.next { right: clamp(8px, 2vw, 28px); }
+.gal-btn:hover { transform: translateY(-50%) translate(-1px, -2px); box-shadow: 4px 5.5px 0 var(--ink-line); }
+.gal-btn:active { transform: translateY(-50%) translate(1px, 2px); box-shadow: 1px 1px 0 var(--ink-line); }
+.gal-btn[disabled] { opacity: .35; cursor: default; pointer-events: none; }
+@media (max-width: 600px) {
+  .gal-btn { width: 44px; height: 44px; }
+  .gal-btn svg { width: 18px; height: 18px; }
+}
+
 /* ---------- Skyline + Footer ---------- */
 .skyline {
   margin-top: clamp(1.5rem, 4vw, 3rem);

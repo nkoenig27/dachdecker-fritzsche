@@ -112,6 +112,45 @@
     });
   });
 
+  /* ---------- Galerie-Karussell ---------- */
+  var scroller = document.querySelector('.gallery-scroller');
+  if (scroller) {
+    var prevBtn = document.querySelector('.gal-btn.prev');
+    var nextBtn = document.querySelector('.gal-btn.next');
+
+    var updateButtons = function () {
+      var maxScroll = scroller.scrollWidth - scroller.clientWidth;
+      if (prevBtn) prevBtn.disabled = scroller.scrollLeft <= 4;
+      if (nextBtn) nextBtn.disabled = scroller.scrollLeft >= maxScroll - 4;
+    };
+
+    var step = function (dir) {
+      var item = scroller.querySelector('.gallery-item');
+      var dist = item
+        ? item.getBoundingClientRect().width + 24
+        : scroller.clientWidth * 0.8;
+      var maxX = scroller.scrollWidth - scroller.clientWidth;
+      var target = Math.max(0, Math.min(maxX, scroller.scrollLeft + dir * dist));
+      // Sanftes Gleiten, wo unterstützt …
+      try {
+        scroller.scrollTo({ left: target, behavior: reduceMotion ? 'auto' : 'smooth' });
+      } catch (e) {
+        scroller.scrollLeft = target;
+      }
+      // … und ein garantierter Fallback, falls die Animation nicht greift.
+      setTimeout(function () {
+        if (Math.abs(scroller.scrollLeft - target) > 4) scroller.scrollLeft = target;
+        updateButtons();
+      }, 500);
+    };
+
+    if (prevBtn) prevBtn.addEventListener('click', function () { step(-1); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { step(1); });
+    scroller.addEventListener('scroll', updateButtons, { passive: true });
+    window.addEventListener('resize', updateButtons);
+    updateButtons();
+  }
+
   /* ---------- Jahr im Footer ---------- */
   document.querySelectorAll('.year').forEach(function (el) {
     el.textContent = new Date().getFullYear();
