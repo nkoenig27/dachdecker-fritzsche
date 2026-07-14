@@ -619,7 +619,8 @@ h1, h2 {
 
 .gallery-item {
   position: relative;
-  flex: none;
+  flex: 0 0 auto;
+  width: max-content;
   margin: 0;
   scroll-snap-align: center;
   background: var(--card);
@@ -642,8 +643,10 @@ h1, h2 {
   border-radius: 10px;
   overflow: hidden;
 }
-.is-land .gallery-media { aspect-ratio: 4 / 3; }
-.is-port .gallery-media { aspect-ratio: 3 / 4; }
+/* Explizite Breiten statt aspect-ratio — Safari leitet die Breite aus
+   Höhe+aspect-ratio im Flex-Karussell nicht zuverlässig ab. */
+.is-land .gallery-media { width: calc(var(--gal-h) * 4 / 3); }
+.is-port .gallery-media { width: calc(var(--gal-h) * 3 / 4); }
 .gallery-media svg { width: 100%; height: 100%; display: block; }
 
 .gallery-item figcaption {
