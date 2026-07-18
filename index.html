@@ -442,6 +442,48 @@
     </div>
   </section>
 
+  <!-- ======================= GOOGLE-BEWERTUNG ======================= -->
+  <section class="review" id="bewertung">
+    <div class="wrap">
+      <div class="review-card">
+        <svg class="review-stars" viewBox="0 0 360 74" aria-hidden="true">
+          <defs>
+            <path id="star-shape" d="M0 -21 L6.3 -6.6 L21.8 -6.6 L9.2 2.9 L13.4 18.4 L0 9.3 L-13.4 18.4 L-9.2 2.9 L-21.8 -6.6 L-6.3 -6.6 Z"/>
+            <clipPath id="star-half"><rect x="-24" y="-24" width="24" height="48"/></clipPath>
+          </defs>
+          <g stroke="#3A342C" stroke-width="2.5" stroke-linejoin="round">
+            <use href="#star-shape" transform="translate(32 36) rotate(-4)" fill="#E9B44C"/>
+            <use href="#star-shape" transform="translate(97 34) rotate(3)" fill="#E9B44C"/>
+            <use href="#star-shape" transform="translate(162 37) rotate(-2)" fill="#E9B44C"/>
+            <use href="#star-shape" transform="translate(227 34) rotate(4)" fill="#E9B44C"/>
+            <!-- fünfter Stern: wird gerade ausgemalt -->
+            <g transform="translate(292 36) rotate(-3)">
+              <use href="#star-shape" fill="#FFFDF7"/>
+              <use href="#star-shape" fill="#E9B44C" clip-path="url(#star-half)" stroke="none"/>
+              <use href="#star-shape" fill="none"/>
+            </g>
+          </g>
+          <!-- Stift -->
+          <g transform="translate(302 30) rotate(38)">
+            <rect x="-5" y="-34" width="10" height="30" rx="2.5" fill="#C65A2E" stroke="#3A342C" stroke-width="2.5"/>
+            <path d="M-5 -4 L0 6 L5 -4 z" fill="#F2C9A0" stroke="#3A342C" stroke-width="2.5" stroke-linejoin="round"/>
+            <circle cx="0" cy="4.6" r="1.6" fill="#3A342C"/>
+          </g>
+          <!-- Funkel -->
+          <path d="M337 14 v10 M332 19 h10 M348 40 v7 M344.5 43.5 h7" stroke="#C65A2E" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+
+        <h2>Zufrieden mit unserer Arbeit?</h2>
+        <p class="review-text">Dann freuen wir uns über eine Bewertung bei Google – das hilft uns sehr und dauert nur eine Minute.</p>
+        <a class="btn btn--primary" href="https://search.google.com/local/writereview?placeid=ChIJlRfBt9uYpkcRta61vnYavNM" target="_blank" rel="noopener">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="5" stroke-linejoin="round" d="M32 7 L39.6 24.4 L58 26.2 L44 38.6 L48.2 56.6 L32 46.8 L15.8 56.6 L20 38.6 L6 26.2 L24.4 24.4 Z"/></svg>
+          Auf Google bewerten
+        </a>
+        <p class="review-hint">Öffnet Google in einem neuen Tab ↗</p>
+      </div>
+    </div>
+  </section>
+
   <!-- ======================= KONTAKT ======================= -->
   <section class="contact" id="kontakt">
     <span class="float-doodle float-doodle--desktop bob" style="right: 5%; top: 10px;">
@@ -587,6 +629,7 @@
 <footer>
   <p>© <span class="year">2026</span> Holger Fritzsche · Dachdeckermeister · Naumburg (Saale) OT Bad Kösen</p>
   <p class="foot-sub">Fachbetrieb für Dächer, Fassaden und Abdichtungen · Innungsbetrieb im Dachdeckerhandwerk</p>
+  <p class="foot-review"><a href="https://search.google.com/local/writereview?placeid=ChIJlRfBt9uYpkcRta61vnYavNM" target="_blank" rel="noopener">Bewerten Sie uns auf Google ↗</a></p>
   <p class="foot-links">
     <a href="impressum.html">Impressum</a> &nbsp;·&nbsp;
     <a href="datenschutz.html">Datenschutz</a>
